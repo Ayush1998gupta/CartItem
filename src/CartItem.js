@@ -7,14 +7,31 @@ class CartItem extends React.Component {
       this.state = {
          price: 999,
          title: ' Mobile Phone',
-         qty: 5,
+         qty: 1,
          img: ''
       }
    }
 
 
-   increaseQuantity=()=> {
-      console.log( this.state);
+   increaseQuantity = () => {
+      // this.state.qty += 1;
+      // console.log(this.state);
+
+
+      // set state form 1
+
+      // this.setState({
+      //    qty: this.state.qty + 1
+      // })
+
+
+      // set state form 2
+      
+      this.setState((prevState) => {
+         return {
+            qty:prevState.qty+1
+         }
+      });
    }
    render() {
 
@@ -43,7 +60,7 @@ class CartItem extends React.Component {
                   />
                   <img
                      alt="delete"
-                     className="action-icons" 
+                     className="action-icons"
                      src="https://cdn-icons.flaticon.com/png/128/3405/premium/3405244.png?token=exp=1657277847~hmac=28c1d7e13a14e1627287c9c2cc60be09"
                   />
                </div>

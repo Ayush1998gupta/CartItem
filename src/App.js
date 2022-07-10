@@ -13,7 +13,7 @@ class App extends React.Component {
     this.db = firebase.firestore();
   }
 
-  
+
   // componentDidMount() {
   //   firebase
   //     .firestore()
@@ -32,6 +32,8 @@ class App extends React.Component {
   componentDidMount() {
     this.db
       .collection("products")
+      // .where('price','<=',999)
+      .orderBy('price','desc')
       .onSnapshot(snapshot => {
         const products = snapshot.docs.map(doc => {
           const data = doc.data();
@@ -86,7 +88,7 @@ class App extends React.Component {
     //   products
     // })
 
-     const docRef = this.db.collection('products').doc(products[index].id);
+    const docRef = this.db.collection('products').doc(products[index].id);
 
     docRef
       .update({
@@ -103,11 +105,22 @@ class App extends React.Component {
   handelDeleteProduct = (id) => {
     const { products } = this.state;
 
-    const items = products.filter((item) => item.id !== id);
+    // const items = products.filter((item) => item.id !== id);
 
-    this.setState({
-      products: items
-    })
+    // this.setState({
+    //   products: items
+    // })
+
+    const docRef = this.db.collection('products').doc(id);
+
+    docRef
+      .delete()
+      .then(() => {
+        console.log('Deleted successfully');
+      })
+      .catch((error) => {
+        console.log('Error', error);
+      });
 
   }
 
@@ -140,10 +153,10 @@ class App extends React.Component {
     this.db
       .collection("products")
       .add({
-        img: "",
+        img: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8Y2FtZXJhfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
         price: 900,
         qty: 3,
-        title: "Washing Machine"
+        title: "Camera"
       })
       .then(docRef => {
         docRef.get().then(snapshot => {
@@ -155,7 +168,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { products,loading } = this.state;
+    const { products, loading } = this.state;
     return (
       <div className="App">
         <Navbar count={this.getCartCount()} />
